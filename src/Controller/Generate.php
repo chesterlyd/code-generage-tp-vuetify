@@ -845,6 +845,7 @@ CODE;
         }
 
         $searchHtml = '';
+        $searchRules = '';
         $tableColumns = [];
         $searchField = [];
         $tpl = Config::get('curd.');
@@ -861,6 +862,7 @@ CODE;
                     $tmpTpl = $tpl['search'][$v['business']];
                 }
                 $searchHtml .= str_replace(['{{name}}', '{{label}}', '{{value}}'], [$v['name'], $v['label'], $v['name']], $tmpTpl) . "\n";
+                $searchRules .= "{$v['name']}: []" . "\n";
                 $searchField[$v['name']] = '';
             }
         }
@@ -882,7 +884,7 @@ CODE;
         $tableColumns = empty($tableColumns) ? '[]' : json_encode($tableColumns, JSON_UNESCAPED_UNICODE);
         $searchField = empty($searchField) ? '{}' : json_encode($searchField, JSON_UNESCAPED_UNICODE);
         $componentName = "{$viewDirName}-index";
-        $code = str_replace(['{{ search_form }}', '{{table_columns}}', '{{search_field}}', '{{controller_name}}', '{{component_name}}'], [$searchHtml, $tableColumns, $searchField, $viewDirName, $componentName], $code);
+        $code = str_replace(['{{ search_form }}', '{{table_columns}}', '{{search_field}}', '{{controller_name}}', '{{component_name}}', '{{search_rules}}'], [$searchHtml, $tableColumns, $searchField, $viewDirName, $componentName, $searchRules], $code);
         $this->createPath($viewDir);
         file_put_contents($viewPath, $code);
         return true;

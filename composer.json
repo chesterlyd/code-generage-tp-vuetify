@@ -1,0 +1,48 @@
+{
+  "name": "chesterlyd/code-generate-tp-vuetify",
+  "description": "适用于ThinkPHP的代码生成工具",
+  "require": {
+    "php": ">=7.1.0",
+    "ext-json": "*",
+    "ext-mbstring": "*",
+    "topthink/framework": "6.0.*",
+    "guzzlehttp/guzzle": "^6.3"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "LVYUEDONG",
+      "email": "1621259898@qq.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "autoload": {
+    "psr-4": {
+      "Generate\\": "src/"
+    }
+  },
+  "require-dev": {
+    "brainmaestro/composer-git-hooks": "^2.8",
+    "friendsofphp/php-cs-fixer": "^2.15"
+  },
+  "scripts": {
+    "post-install-cmd": "cghooks add --ignore-lock",
+    "post-update-cmd": "cghooks update",
+    "phpcs-fix": "php-cs-fixer fix",
+    "phpcs-dry": "php-cs-fixer fix --dry-run"
+  },
+  "extra": {
+    "hooks": {
+      "pre-commit": [
+        "composer phpcs-fix",
+        "git add $(git diff --cached --name-only --diff-filter=ACM -- '*.php')"
+      ],
+      "post-merge": "composer update"
+    },
+    "think": {
+      "services": [
+        "Generate\\Service"
+      ]
+    }
+  }
+}

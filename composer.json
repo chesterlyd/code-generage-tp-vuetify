@@ -5,7 +5,7 @@
     "php": ">=7.1.0",
     "ext-json": "*",
     "ext-mbstring": "*",
-    "topthink/framework": "6.0.*",
+    "topthink/framework": "5.1.*",
     "guzzlehttp/guzzle": "^6.3"
   },
   "license": "MIT",
@@ -19,11 +19,15 @@
   "autoload": {
     "psr-4": {
       "Generate\\": "src/"
-    }
+    },
+    "files": [
+      "src/common.php"
+    ]
   },
   "require-dev": {
     "brainmaestro/composer-git-hooks": "^2.8",
-    "friendsofphp/php-cs-fixer": "^2.15"
+    "friendsofphp/php-cs-fixer": "^2.15",
+    "phpoffice/phpspreadsheet": "^1.10"
   },
   "scripts": {
     "post-install-cmd": "cghooks add --ignore-lock",
@@ -38,11 +42,9 @@
         "git add $(git diff --cached --name-only --diff-filter=ACM -- '*.php')"
       ],
       "post-merge": "composer update"
-    },
-    "think": {
-      "services": [
-        "Generate\\Service"
-      ]
     }
+  },
+  "suggest": {
+    "phpoffice/phpspreadsheet": "Required for using the export data"
   }
 }

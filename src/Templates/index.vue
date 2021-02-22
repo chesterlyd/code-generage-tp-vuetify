@@ -84,7 +84,7 @@ export default class App extends Mixins(index) {
     deleteUrl: "/admin/{{controller_name}}/delete",
   };
   expanded = [];
-  rules = {};
+  rules = {{{search_rules}}};
 }
 </script>
 

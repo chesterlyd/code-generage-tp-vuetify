@@ -3,16 +3,20 @@
     <v-form>
       <v-container>
         <v-row>
+          <v-col>
+            {{ search_form }}
+          </v-col>
+        </v-row>
+        <v-row>
           <v-col cols="12" lg="3">
             <v-btn><v-icon left size="24">mdi-plus</v-icon>添加</v-btn>
-          </v-col>
-          <v-col cols="12" lg="3">
-            <v-btn color="success"
-              ><v-icon left size="24">mdi-magnify</v-icon>搜索</v-btn
-            >
-            <v-btn text color="error"
-              ><v-icon left size="18">fa-refresh</v-icon>清空</v-btn
-            >
+            <v-btn color="success">
+              <v-icon left size="24">mdi-magnify</v-icon>
+              搜索
+            </v-btn>
+            <v-btn text color="error">
+              <v-icon left size="18">fa-refresh</v-icon>清空
+            </v-btn>
           </v-col>
         </v-row>
         <v-row> </v-row>
@@ -92,7 +96,9 @@ export default class App extends Mixins(index) {
   //       width: 280,
   //     },
   //   ];
-  header: Headers[] = [];
+  header: Headers[] = [
+    {{table_columns}}
+  ];
   tableData: Data = {
     current_page: 1,
     data: [],

@@ -70,7 +70,7 @@
               ></Checkbox>
             </checkbox-group>
           </div>
-          <div style="margin-bottom: 20px" v-if="create.fruit == '视图'">
+          <div style="margin-bottom: 20px" v-if="create.fruit.includes('视图')">
             <radio-group v-model="create.view_type">
               创建：
               <Radio label="跳页"></Radio>

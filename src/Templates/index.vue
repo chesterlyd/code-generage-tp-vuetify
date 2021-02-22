@@ -70,35 +70,7 @@ import { Data, Headers } from "i";
   name: "{{component_name}}",
 })
 export default class App extends Mixins(index) {
-  //   header: Headers[] = [
-  //     {
-  //       text: "",
-  //       value: "data-table-expand",
-  //     },
-  //     {
-  //       text: "1",
-  //       value: "a",
-  //       width: 150,
-  //     },
-  //     {
-  //       text: "2",
-  //       value: "a",
-  //       width: 500,
-  //     },
-  //     {
-  //       text: "3",
-  //       value: "a",
-  //       width: 400,
-  //     },
-  //     {
-  //       text: "handler",
-  //       value: "handler",
-  //       width: 280,
-  //     },
-  //   ];
-  header: Headers[] = [
-    {{table_columns}}
-  ];
+  header: Headers[] = {{table_columns}};
   tableData: Data = {
     current_page: 1,
     data: [],

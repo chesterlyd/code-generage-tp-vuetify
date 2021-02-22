@@ -1010,9 +1010,9 @@ CODE;
         }
         $meta = <<<META
 {
-    "index": '"{$showName}"',
-    "add": '"添加{$showName}"',
-    "edit": '"修改{$showName}"',
+    "index": "{$showName}",
+    "add": "添加{$showName}",
+    "edit": "修改{$showName}"
 }
 META;
         $this->createPath($viewDir);

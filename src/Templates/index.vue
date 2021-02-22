@@ -3,13 +3,14 @@
     <v-form>
       <v-container>
         <v-row>
-          <v-col>
-            {{ search_form }}
-          </v-col>
+          {{ search_form }}
         </v-row>
         <v-row>
           <v-col cols="12" lg="3">
-            <v-btn><v-icon left size="24">mdi-plus</v-icon>添加</v-btn>
+            <v-btn to="/{{controller_name}}/add">
+              <v-icon left size="24">mdi-plus</v-icon>
+              添加
+            </v-btn>
             <v-btn color="success">
               <v-icon left size="24">mdi-magnify</v-icon>
               搜索

@@ -28,12 +28,12 @@ return [
      * {{name}}{{label}}{{value}}
      */
     'search' => [
-        'text'     => '<l-input dense v-model="formData.{{name}}" :rules="\'rules.\'+formData.{{name}}" label="{{label}}"></l-input>',
-        'number'   => '<l-input dense type="number" v-model="formData.{{name}}" :rules="\'rules.\'+formData.{{name}}" label="{{label}}"></l-input>',
-        'select'   => '<l-select dense label="select" v-model="formData.{{name}}" :items="{{name}}List"></l-select>',
-        'date'     => '<l-date v-model="formData.{{name}}" label="{{label}}"></l-date>',
-        'datetime' => '<l-date-time v-model="formData.{{name}}" label="{{label}}"></l-date-time>',
-        'textarea' => '<v-textarea v-model="formData.{{name}}" label="{{label}}" solo rows="3" auto-grow></v-textarea>',
+        'text'     => '<v-col cols="12" lg="3"><l-input dense v-model="searchData.{{name}}" :rules="rules.{{name}}" label="{{label}}"></l-input></v-col>',
+        'number'   => '<v-col cols="12" lg="3"><l-input dense type="number" v-model="searchData.{{name}}" :rules="rules.{{name}}" label="{{label}}"></l-input></v-col>',
+        'select'   => '<v-col cols="12" lg="3"><l-select dense label="select" v-model="searchData.{{name}}" :items="{{name}}List"></l-select></v-col>',
+        'date'     => '<v-col cols="12" lg="3"><l-date v-model="searchData.{{name}}" label="{{label}}"></l-date></v-col>',
+        'datetime' => '<v-col cols="12" lg="3"><l-date-time v-model="searchData.{{name}}" label="{{label}}"></l-date-time></v-col>',
+        'textarea' => '<v-col cols="12" lg="3"><v-textarea v-model="searchData.{{name}}" label="{{label}}" solo rows="3" auto-grow></v-textarea></v-col>',
     ],
     'yapi' => [
         'domain' => '', //yapi域名

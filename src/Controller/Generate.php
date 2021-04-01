@@ -852,8 +852,8 @@ CODE;
         foreach ($data['pageData'] as $k => $v) {
             if (in_array('查', $v['curd'])) {
                 $tableColumns[] = [
-                    'text'  => $v['label'],
-                    'value' => $v['name'],
+                    'title'  => $v['label'],
+                    'key' => $v['name'],
                 ];
             }
             if ($v['search'] == true) {
@@ -867,8 +867,8 @@ CODE;
             }
         }
         $tableColumns[] = [
-            'text' => '操作',
-            'value'  => 'handler',
+            'title' => '操作',
+            'key'  => 'handler',
             'width' => 280,
             'align' => 'center',
         ];

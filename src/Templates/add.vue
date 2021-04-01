@@ -16,11 +16,8 @@ import Add from "add"
 })
 export default class App extends Mixins(Add) {
 	formData = {{curd_form_field}}
-	tableConfig = {
+	config = {
 		addUrl: "/admin/{{controller_name}}/add",
-	}
-	rules = {
-		name: [(v: any) => !!v || "不能为空"],
 	}
 }
 </script>

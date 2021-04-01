@@ -65,26 +65,24 @@
 <script lang="ts">
 import { Mixins, Component } from "vue-property-decorator";
 import index from "index";
-import { Data, Headers } from "i";
+import { TableHeader } from "i";
 
 @Component({
   name: "{{component_name}}",
 })
 export default class App extends Mixins(index) {
-  header: Headers[] = {{table_columns}};
-  tableData: Data = {
+  header: TableHeader[] = {{table_columns}};
+  tableData = {
     current_page: 1,
     data: [],
     last_page: 1,
     per_page: 0,
     total: 0,
   };
-  tableConfig = {
+  config = {
     indexUrl: "/admin/{{controller_name}}/index",
     deleteUrl: "/admin/{{controller_name}}/delete",
   };
-  expanded = [];
-  rules = {{{search_rules}}};
 }
 </script>
 

@@ -16,11 +16,8 @@ import Edit from "edit"
 })
 export default class App extends Mixins(Edit) {
 	formData = {{curd_form_field}}
-	tableConfig = {
+	config = {
 		editUrl:"/admin/{{controller_name}}/edit"
-	}
-	rules = {
-		name: [(v: any) => !!v || "不能为空"],
 	}
 }
 </script>

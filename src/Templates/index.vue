@@ -1,89 +1,97 @@
 <template>
-  <div class="index-content">
-    <v-form>
-      <v-container>
-        <v-row>
+  <div class="content">
+    <div class="card-title">
+      <h4></h4>
+      <!--      <v-top-echarts :data="tableData.data"></v-top-echarts>-->
+    </div>
+    <div class="card">
+      <Form :model="searchData" inline label-colon ref="form">
+        <FormItem>
           {{ search_form }}
-        </v-row>
-        <v-row>
-          <v-col cols="12" lg="3">
-            <v-btn to="/{{controller_name}}/add">
-              <v-icon left size="24">mdi-plus</v-icon>
-              添加
-            </v-btn>
-            <v-btn color="success">
-              <v-icon left size="24">mdi-magnify</v-icon>
-              搜索
-            </v-btn>
-            <v-btn text color="error">
-              <v-icon left size="18">fa-refresh</v-icon>清空
-            </v-btn>
-          </v-col>
-        </v-row>
-        <v-row> </v-row>
-      </v-container>
-    </v-form>
-    <l-table
-      show-select
-      show-expand
-      :loading="loading"
-      :headers="header"
-      :select.sync="tableSelect"
-      :data="tableData"
-      :expanded.sync="expanded"
-      @change="pageChange"
-    >
-      <template #handler="{ row }">
-        <v-btn
-          color="primary"
-          text
-          :to="'/{{controller_name}}/edit?id=' + row.id"
-          small
-          ><v-icon size="14" left>fa-edit</v-icon>edit</v-btn
-        >
-        <v-btn color="error" text @click="deleteHandle(row)" small
-          ><v-icon size="14" left>fa-trash-o</v-icon>delete</v-btn
-        >
-        <!-- <l-more-btn small>
-					<v-list-item @click="clickHandle" color="error">
-						<v-icon size="14" left>fa-trash-o</v-icon>
-						delete
-					</v-list-item>
-					<v-list-item>
-						<v-icon size="14" left>fa-trash-o</v-icon>
-						delete
-					</v-list-item>
-				</l-more-btn> -->
-      </template>
-      <template #expanded-item="{ row }">
-        <!-- {{ row.a }} -->
-      </template>
-    </l-table>
+          <Button
+              type="primary"
+              :loading="loading"
+              icon="ios-search-outline"
+          >
+            搜索
+          </Button>
+          <Button
+              type="error"
+              icon="ios-sync"
+              @click="formResetFields"
+          >
+            重置
+          </Button>
+        </FormItem>
+      </Form>
+      <Table
+          ref="table"
+          border
+          highlight-row
+          context-menu
+          show-context-menu
+          :loading="loading"
+          :columns="header"
+          :data="tableData.data"
+          @on-select="onSelect"
+          @on-contextmenu="contextMenuHandle"
+      >
+        <template #contextMenu>
+          <DropdownItem
+              @click.native="
+							toPage('/{{controller_name}}/edit?id=' + contextLine.id)
+						"
+          >
+            编辑
+          </DropdownItem>
+          <DropdownItem
+              @click.native="deleteHandle"
+              style="color: #ed4014"
+          >
+            删除
+          </DropdownItem>
+        </template>
+      </Table>
+      <Row justify="end" class="page">
+        <Page
+            show-sizer
+            show-elevator
+            show-total
+            transfer
+            :total="tableData.total"
+            :current.sync="tableData.current_page"
+            :page-size="tableData.per_page"
+            :page-size-opts="pageSizeOpts"
+            @on-page-size-change="onPageSizeChange"
+        />
+      </Row>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Mixins, Component } from "vue-property-decorator";
-import index from "index";
+import Index from "index";
 import { TableHeader } from "i";
 
 @Component({
   name: "{{component_name}}",
 })
-export default class App extends Mixins(index) {
+export default class App extends Mixins(Index) {
   header: TableHeader[] = {{table_columns}};
-  tableData = {
-    current_page: 1,
-    data: [],
-    last_page: 1,
-    per_page: 0,
-    total: 0,
-  };
-  config = {
-    indexUrl: "/admin/{{controller_name}}/index",
-    deleteUrl: "/admin/{{controller_name}}/delete",
-  };
+tableData = {
+  current_page: 1,
+  data: [],
+  last_page: 1,
+  per_page: 0,
+  total: 0,
+};
+config = {
+  indexUrl: "/admin/{{controller_name}}/index",
+  deleteUrl: "/admin/{{controller_name}}/delete",
+};
 }
 </script>
 
 <style lang="scss" scoped></style>
+

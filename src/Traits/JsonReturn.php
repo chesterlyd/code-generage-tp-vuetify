@@ -37,6 +37,7 @@ trait JsonReturn
             'code'   => $code,
             'status' => 'success',
             'data'   => $res,
+            'timestamp' => time()
         ];
         $data['data'] = $res;
         throw new HttpResponseException(json($data));
@@ -55,6 +56,7 @@ trait JsonReturn
             'code'   => $code,
             'status' => 'fail',
             'msg'    => $failMessage,
+            'timestamp' => time()
         ];
         throw new HttpResponseException(json($data));
     }

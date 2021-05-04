@@ -40,6 +40,6 @@ return [
         'token' => '', //项目token,
     ],
     'tableColumn' => [
-        'column' => '<el-table-column label="tableColumn.{{name}}" prop="tableColumn.{{field}}"></el-table-column>'
+        'column' => '<el-table-column label="{{name}}" prop="{{field}}"></el-table-column>'
     ]
 ];

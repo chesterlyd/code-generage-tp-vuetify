@@ -1,6 +1,9 @@
 <template>
   <v-content no-back>
     <template #right>
+    </template>
+
+    <template #main>
       <el-form inline>
         <el-form-item>
           {{ search_form }}
@@ -15,9 +18,6 @@
           </el-button>
         </el-form-item>
       </el-form>
-    </template>
-
-    <template #main>
       <el-button @click="toPage('./add')" icon="el-icon-plus" size="small"> 添加 </el-button>
     </template>
 

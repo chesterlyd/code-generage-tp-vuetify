@@ -1,45 +1,44 @@
 <template>
-  <div class="content edit">
-    <div class="card-title">
-      <Button @click="toPage(-1)">
-        <Icon type="ios-arrow-back" /> 返回
-      </Button>
-      <h4>编辑</h4>
-    </div>
-    <div class="card">
-      <Form
-          class="form"
-          ref="form"
-          :model="formData"
-          :rules="rules"
-          label-position="left"
-          :label-width="120"
-      >
-        {{ curd_form_group }}
-        <Button type="primary" @click="submit">保存</Button>
-      </Form>
-    </div>
-  </div>
+  <v-content>
+    <el-form
+        :model="formData"
+        :rules="rules"
+        class="el-form"
+        ref="form"
+        label-position="right"
+        label-width="80px"
+    >
+      {{ curd_form_group }}
+      <el-form-item>
+        <el-button type="primary" @click="submit">保存</el-button>
+      </el-form-item>
+    </el-form>
+  </v-content>
 </template>
 
-<script lang="ts">
-import { Mixins, Component } from "vue-property-decorator"
-import Edit from "edit"
+<script>
+import { defineComponent } from "vue"
+import editMixin from "/edit"
 
-@Component({
-  name: "{{component_name}}",
+export default defineComponent({
+  mixins: [editMixin],
+  data() {
+    return {
+      formData: {{curd_form_field}},
+    rules: {},
+    editUrl: "/admin/{{controller_name}}/edit",
+
+        options: [],
+  }
+  },
+  methods: {},
 })
-export default class App extends Mixins(Edit) {
-  formData = {{curd_form_field}}
-config = {
-  editUrl:"/admin/{{controller_name}}/edit"
-}
-}
 </script>
 
 <style lang="scss" scoped>
-.v-form {
-  width: 100%;
-  max-width: 950px;
+.el-form-item {
+  &.input {
+    width: 780px;
+  }
 }
 </style>

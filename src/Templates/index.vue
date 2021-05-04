@@ -1,97 +1,91 @@
 <template>
-  <div class="content">
-    <div class="card-title">
-      <h4></h4>
-      <!--      <v-top-echarts :data="tableData.data"></v-top-echarts>-->
-    </div>
-    <div class="card">
-      <Form :model="searchData" inline label-colon ref="form">
-        <FormItem>
+  <v-content no-back>
+    <template #right>
+      <el-form inline>
+        <el-form-item>
           {{ search_form }}
-          <Button
+          <el-button
+              icon="el-icon-search"
+              size="mini"
+              round
               type="primary"
-              :loading="loading"
-              icon="ios-search-outline"
+              @click="toSearch"
           >
             搜索
-          </Button>
-          <Button
-              type="error"
-              icon="ios-sync"
-              @click="formResetFields"
-          >
-            重置
-          </Button>
-        </FormItem>
-      </Form>
-      <Table
-          ref="table"
-          border
-          highlight-row
-          context-menu
-          show-context-menu
-          :loading="loading"
-          :columns="header"
-          :data="tableData.data"
-          @on-select="onSelect"
-          @on-contextmenu="contextMenuHandle"
-      >
-        <template #contextMenu>
-          <DropdownItem
-              @click.native="
-							toPage('/{{controller_name}}/edit?id=' + contextLine.id)
-						"
+          </el-button>
+        </el-form-item>
+      </el-form>
+    </template>
+
+    <template #main>
+      <el-button @click="toPage('./add')" icon="el-icon-plus" size="small"> 添加 </el-button>
+    </template>
+
+    <el-table v-loading="loading" :data="tableData.data" @selection-change="selectionChange">
+      {{ table_colum_html }}
+      <el-table-column label="操作" width="350" align="center" header-align="center">
+        <template #default="{ row }">
+          <el-button
+              type="text"
+              size="mini"
+              icon="el-icon-edit"
+              @click="toPage('./edit', { query: { id: row.id } })"
           >
             编辑
-          </DropdownItem>
-          <DropdownItem
-              @click.native="deleteHandle"
-              style="color: #ed4014"
+          </el-button>
+          <el-popconfirm
+              title="是否确定删除？"
+              @confirm="toDelete(row)"
+              placement="top-end"
           >
-            删除
-          </DropdownItem>
+            <template #reference>
+              <el-button
+                  type="text"
+                  size="mini"
+                  icon="el-icon-delete"
+                  style="color: #f56c6c"
+              >
+                删除
+              </el-button>
+            </template>
+          </el-popconfirm>
         </template>
-      </Table>
-      <Row justify="end" class="page">
-        <Page
-            show-sizer
-            show-elevator
-            show-total
-            transfer
-            :total="tableData.total"
-            :current.sync="tableData.current_page"
+      </el-table-column>
+    </el-table>
+    <br />
+    <el-row type="flex" justify="end">
+      <el-col :span="6">
+        <el-pagination
+            class="el-pagination"
+            background
+            layout="total,prev,pager,next,sizes,jumper"
+            :current-page="tableData.current_page"
+            :page-sizes="[10, 20, 30, 40, 50, 70, 100]"
             :page-size="tableData.per_page"
-            :page-size-opts="pageSizeOpts"
-            @on-page-size-change="onPageSizeChange"
-        />
-      </Row>
-    </div>
-  </div>
+            :total="tableData.total"
+            @size-change="sizeChange"
+            @current-change="currentChange"
+        >
+        </el-pagination>
+      </el-col>
+    </el-row>
+  </v-content>
 </template>
 
-<script lang="ts">
-import { Mixins, Component } from "vue-property-decorator";
-import Index from "index";
-import { TableHeader } from "i";
+<script>
+import { defineComponent } from "vue"
+import indexMixin from "/index"
 
-@Component({
-  name: "{{component_name}}",
+export default defineComponent({
+  mixins: [indexMixin],
+  data() {
+    return {
+      indexUrl: "/admin/{{controller_name}}/index",
+      deleteUrl: "/admin/{{controller_name}}/delete",
+    }
+  },
+  methods: {},
 })
-export default class App extends Mixins(Index) {
-  header: TableHeader[] = {{table_columns}};
-tableData = {
-  current_page: 1,
-  data: [],
-  last_page: 1,
-  per_page: 0,
-  total: 0,
-};
-config = {
-  indexUrl: "/admin/{{controller_name}}/index",
-  deleteUrl: "/admin/{{controller_name}}/delete",
-};
-}
 </script>
 
 <style lang="scss" scoped></style>
-

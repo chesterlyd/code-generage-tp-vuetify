@@ -846,15 +846,14 @@ CODE;
 
         $searchHtml = '';
         $searchRules = '';
-        $tableColumns = [];
+        $tableColumnsHtml = '';
         $searchField = [];
         $tpl = Config::get('curd.');
+//        dump($data['pageData']);exit();
         foreach ($data['pageData'] as $k => $v) {
             if (in_array('查', $v['curd'])) {
-                $tableColumns[] = [
-                    'title'  => $v['label'],
-                    'key' => $v['name'],
-                ];
+                $tmpTpl = $tpl['tableColumn']['column'];
+                $tableColumnsHtml .= str_replace(['{{name}}', '{{field}}'], [$v['comment'], $v['name']], $tmpTpl) . "\n";
             }
             if ($v['search'] == true) {
                 $tmpTpl = $tpl['search']['text'];
@@ -866,12 +865,6 @@ CODE;
                 $searchField[$v['name']] = '';
             }
         }
-        $tableColumns[] = [
-            'title' => '操作',
-            'key'  => 'handler',
-            'width' => 280,
-            'align' => 'center',
-        ];
 
         $templatePath = Config::get('curd.index_template');
         if (empty($templatePath)) {
@@ -881,10 +874,9 @@ CODE;
             return '模板文件不存在:' . $templatePath;
         }
         $code = file_get_contents($templatePath);
-        $tableColumns = empty($tableColumns) ? '[]' : json_encode($tableColumns, JSON_UNESCAPED_UNICODE);
         $searchField = empty($searchField) ? '{}' : json_encode($searchField, JSON_UNESCAPED_UNICODE);
         $componentName = "{$viewDirName}-index";
-        $code = str_replace(['{{ search_form }}', '{{table_columns}}', '{{search_field}}', '{{controller_name}}', '{{component_name}}', '{{search_rules}}'], [$searchHtml, $tableColumns, $searchField, $viewDirName, $componentName, $searchRules], $code);
+        $code = str_replace(['{{ search_form }}', '{{ table_colum_html }}', '{{search_field}}', '{{controller_name}}', '{{component_name}}', '{{search_rules}}'], [$searchHtml, $tableColumnsHtml, $searchField, $viewDirName, $componentName, $searchRules], $code);
         $this->createPath($viewDir);
         file_put_contents($viewPath, $code);
         return true;

@@ -3,7 +3,7 @@
 return [
     'success_code' => 1, //成功返回的code值
     'error_code' => 0, //失败返回的code值
-    'back_base_controller' => 'Right', //后台控制器基类，为空则使用\think\Controller
+    'back_base_controller' => 'Signin', //后台控制器基类，为空则使用\think\Controller
     'front_base_controller' => '', //前台无需登录的控制器基类,为空则使用\think\Controller
     'front_sign_controller' => 'SignIn', //前台带登录验证的控制器基类,为空则使用front_base_controller的值
     'index_template' => '', //列表页模板，为空则使用默认
@@ -14,14 +14,14 @@ return [
      * {{name}}{{label}}{{value}}{{attr}}
      */
     'form' => [
-        'text'        => '<l-input dense v-model="formData.{{name}}" :rules="\'rules.\'+formData.{{name}}" label="{{label}}"></l-input>',
-        'number'      => '<l-input dense type="number" v-model="formData.{{name}}" :rules="\'rules.\'+formData.{{name}}" label="{{label}}"></l-input>',
-        'select'      => '<l-select dense label="select" v-model="formData.{{name}}" :items="{{name}}List"></l-select>',
+        'text'        => '<el-form-item class="el-form-item input" label="{{label}}" prop="{{name}}"><el-input v-model="formData.{{name}}" clearable></el-input></el-form-item>',
+        'number'      => '<el-form-item class="el-form-item input" label="{{label}}" prop="{{name}}"><<el-input-number v-model="formData.{{name}}"  :min="0" clearable></<el-input-number></el-form-item>',
+        'select'      => '<el-form-item class="el-form-item input" label="{{label}}" prop="{{name}}"><el-select v-model="formData.{{name}}" placeholder="请选择"><el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option></el-select></el-form-item>',
         'uploadImage' => '<l-upload :uploadAction="path+\'/admin/tools/uploadImage\'" v-model="formData.{{name}}" multiple :max-length="3"></l-upload>',
         'ueditor'     => '<l-editor v-model="formData.{{name}}" :uploadAction="path+\'/admin/tools/uploadImage\'"></l-editor>',
-        'date'        => '<l-date v-model="formData.{{name}}" label="{{label}}"></l-date>',
-        'datetime'    => '<l-date-time v-model="formData.{{name}}" label="{{label}}"></l-date-time>',
-        'textarea'    => '<v-textarea v-model="formData.{{name}}" label="{{label}}" solo rows="3" auto-grow></v-textarea>',
+        'date'        => '<el-form-item class="el-form-item input" label="{{label}}" prop="{{name}}"><el-date-picker v-model="formData.{{name}}" type="date" placeholder="选择日期"></el-date-picker></el-form-item>',
+        'datetime'    => '<el-form-item class="el-form-item input" label="{{label}}" prop="{{name}}"><el-date-picker v-model="formData.{{name}}" type="datetime" placeholder="选择日期时间"></el-date-picker></el-form-item>',
+        'textarea'    => '<el-form-item class="el-form-item input" label="{{label}}" prop="{{name}}"><el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="formData.{{name}}"></el-input></el-form-item>',
     ],
     /*
      * 搜索字段模板，指定使用以下占位符
@@ -39,4 +39,7 @@ return [
         'domain' => '', //yapi域名
         'token' => '', //项目token,
     ],
+    'tableColumn' => [
+        'column' => '<el-table-column label="tableColumn.{{name}}" prop="tableColumn.{{field}}"></el-table-column>'
+    ]
 ];

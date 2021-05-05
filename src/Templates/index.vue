@@ -23,7 +23,7 @@
 
     <el-table v-loading="loading" :data="tableData.data" @selection-change="selectionChange">
       {{ table_colum_html }}
-      <el-table-column label="操作" width="350" align="center" header-align="center">
+      <el-table-column label="操作" align="center" header-align="center">
         <template #default="{ row }">
           <el-button
               type="text"
@@ -54,7 +54,6 @@
     </el-table>
     <br />
     <el-row type="flex" justify="end">
-      <el-col :span="6">
         <el-pagination
             class="el-pagination"
             background
@@ -67,7 +66,6 @@
             @current-change="currentChange"
         >
         </el-pagination>
-      </el-col>
     </el-row>
   </v-content>
 </template>

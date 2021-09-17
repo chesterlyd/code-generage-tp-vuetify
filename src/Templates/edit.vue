@@ -24,11 +24,9 @@ export default defineComponent({
   mixins: [editMixin],
   data() {
     return {
+      module: '{{controller_name}}',
       formData: {{curd_form_field}},
-    rules: {},
-    editUrl: "/admin/{{controller_name}}/edit",
-
-        options: [],
+      rules: {},
   }
   },
   methods: {},

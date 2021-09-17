@@ -21,10 +21,8 @@
       <el-button @click="toPage('./add')" icon="el-icon-plus" size="small"> 添加 </el-button>
     </template>
 
-    <el-table v-loading="loading" :data="tableData.data" @selection-change="selectionChange">
-      {{ table_colum_html }}
-      <el-table-column label="操作" align="center" header-align="center">
-        <template #default="{ row }">
+    <v-table :loading="loading" :options="tableOptions" :data="tableData.data" @selection-change="selectionChange">
+        <template #handler="{ row }">
           <el-button
               type="text"
               size="mini"
@@ -50,23 +48,7 @@
             </template>
           </el-popconfirm>
         </template>
-      </el-table-column>
-    </el-table>
-    <br />
-    <el-row type="flex" justify="end">
-        <el-pagination
-            class="el-pagination"
-            background
-            layout="total,prev,pager,next,sizes,jumper"
-            :current-page="tableData.current_page"
-            :page-sizes="[10, 20, 30, 40, 50, 70, 100]"
-            :page-size="tableData.per_page"
-            :total="tableData.total"
-            @size-change="sizeChange"
-            @current-change="currentChange"
-        >
-        </el-pagination>
-    </el-row>
+    </v-table>
   </v-content>
 </template>
 
@@ -78,8 +60,10 @@ export default defineComponent({
   mixins: [indexMixin],
   data() {
     return {
-      indexUrl: "/admin/{{controller_name}}/index",
-      deleteUrl: "/admin/{{controller_name}}/delete",
+      module: '{{controller_name}}',
+      tableOptions: [
+        {{ table_colum_html }}
+      ],
     }
   },
   methods: {},

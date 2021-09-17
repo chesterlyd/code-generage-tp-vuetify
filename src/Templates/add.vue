@@ -24,11 +24,9 @@ export default defineComponent({
   mixins: [addMixin],
   data() {
     return {
+      module: '{{controller_name}}',
       formData: {{curd_form_field}},
-    rules: {},
-    addUrl: "/admin/{{controller_name}}/add",
-
-        options: [],
+      rules: {},
   }
   },
   methods: {},

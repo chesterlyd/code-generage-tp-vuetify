@@ -102,9 +102,9 @@ trait Curd
                     $field = $k;
                 }
                 $whereData[$k] = [
-                    'val' => $v,
+                    'val'   => $v,
                     'field' => $field,
-                    'type' => $type,
+                    'type'  => $type,
                 ];
             }
         }

@@ -162,7 +162,6 @@ class Generate extends Controller
                     $editRes = $this->createEditView($data, $controllerName);
                     $responseMessage .= ($editRes === true ? "edit视图生成成功\n" : "$editRes\n") . '</br>';
                     $dir = Loader::parseName($controllerName);
-                    $this->createMeta($showName, $dir);
                     $response['router'] = '<p>{title: \'' . $showName . '\',to: \'/' . $dir . '\'}</p>';
                 }
             } else {
@@ -797,6 +796,7 @@ class {$controllerName} extends {$baseController}
     protected \$cache = true; //是否使用缓存
     protected \$modelName  = '{$modelName}';  //模型名
     protected \$indexField = [{$indexField}];  //查，字段名
+    protected \$listIndexField = [{$indexField}];  //查，字段名
     protected \$addField   = [{$addField}];    //增，字段名
     protected \$editField  = [{$editField}];   //改，字段名
     /**
@@ -806,7 +806,9 @@ class {$controllerName} extends {$baseController}
      * @var array
      */
     protected \$searchField = [{$searchField}];
+    protected \$listSearchField = [];
     protected \$orderField = '$orderField';  //排序字段
+    protected \$listOrderField = '';  //排序字段
     protected \$pageLimit   = 10;               //分页数
     
     //增，数据检测规则
@@ -846,9 +848,7 @@ CODE;
         }
 
         $searchHtml = '';
-        $searchRules = '';
         $tableColumnsHtml = '';
-        $searchField = [];
         $tpl = Config::get('curd.');
 //        dump($data['pageData']);exit();
         foreach ($data['pageData'] as $k => $v) {
@@ -862,22 +862,22 @@ CODE;
                     $tmpTpl = $tpl['search'][$v['business']];
                 }
                 $searchHtml .= str_replace(['{{name}}', '{{label}}', '{{value}}'], [$v['name'], $v['label'], $v['name']], $tmpTpl) . "\n";
-                $searchRules .= "{$v['name']}: []" . "\n";
-                $searchField[$v['name']] = '';
             }
         }
 
         $templatePath = Config::get('curd.index_template');
         if (empty($templatePath)) {
-            $templatePath = __DIR__ . '/../Templates/index.vue';
+            $templatePath = __DIR__ . '/../Templates/index1.vue';
         }
         if (!file_exists($templatePath)) {
             return '模板文件不存在:' . $templatePath;
         }
         $code = file_get_contents($templatePath);
-        $searchField = empty($searchField) ? '{}' : json_encode($searchField, JSON_UNESCAPED_UNICODE);
-        $componentName = "{$viewDirName}-index";
-        $code = str_replace(['{{ search_form }}', '{{ table_colum_html }}', '{{search_field}}', '{{controller_name}}', '{{component_name}}', '{{search_rules}}'], [$searchHtml, $tableColumnsHtml, $searchField, $viewDirName, $componentName, $searchRules], $code);
+        $toAddPath = '/' . $viewDirName . '/add';
+        $toEditPath = '/' . $viewDirName . '/edit';
+        $indexUrl = '/admin/' . $viewDirName . '/index';
+        $deleteUrl = '/admin/' . $viewDirName . '/delete';
+        $code = str_replace(['{{ search_form }}', '{{ to_add }}', '{{ to_edit }}', '{{ table_colum_html }}', '{{ index_url }}', '{{ delete_url }}'], [$searchHtml, $toAddPath, $toEditPath, $tableColumnsHtml, $indexUrl, $deleteUrl], $code);
         $this->createPath($viewDir);
         file_put_contents($viewPath, $code);
         return true;
@@ -923,15 +923,15 @@ CODE;
         }
         $templatePath = Config::get('curd.add_template');
         if (empty($templatePath)) {
-            $templatePath = __DIR__ . '/../Templates/add.vue';
+            $templatePath = __DIR__ . '/../Templates/add1.vue';
         }
         if (!file_exists($templatePath)) {
             return '模板文件不存在:' . $templatePath;
         }
         $code = file_get_contents($templatePath);
         $formField = empty($formField) ? '{}' : json_encode($formField, JSON_UNESCAPED_UNICODE);
-        $componentName = "{$viewDirName}-add";
-        $code = str_replace(['{{ curd_form_group }}', '{{curd_form_field}}', '{{controller_name}}', '{{component_name}}'], [$html, $formField, $viewDirName, $componentName], $code);
+        $savePath = '/admin/' . $viewDirName . '/add';
+        $code = str_replace(['{{ curd_form_group }}', '{{curd_form_field}}', '{{ save_url}}'], [$html, $formField, $savePath], $code);
         $this->createPath($viewDir);
         file_put_contents($viewPath, $code);
         return true;
@@ -985,35 +985,35 @@ CODE;
         }
         $code = file_get_contents($templatePath);
         $formField = empty($formField) ? '{}' : json_encode($formField, JSON_UNESCAPED_UNICODE);
-        $componentName = "{$viewDirName}-edit";
-        $code = str_replace(['{{ curd_form_group }}', '{{curd_form_field}}', '{{controller_name}}', '{{component_name}}'], [$html, $formField, $viewDirName, $componentName], $code);
+        $savePath = '/admin/' . $viewDirName . '/edit';
+        $code = str_replace(['{{ curd_form_group }}', '{{curd_form_field}}', '{{ save_path }}'], [$html, $formField, $savePath], $code);
         $this->createPath($viewDir);
         file_put_contents($viewPath, $code);
         return true;
     }
 
-    private function createMeta($showName, $dir)
-    {
-        if (!empty($this->config['view_root'])) {
-            $viewDir = $this->config['view_root'] . "/{$dir}/";
-            $viewPath = $viewDir . 'meta.json';
-        } else {
-            return '配置错误';
-        }
-        if (file_exists($viewPath)) {
-            return 'meta.json文件已存在';
-        }
-        $meta = <<<META
-{
-    "index": "{$showName}",
-    "add": "添加{$showName}",
-    "edit": "修改{$showName}"
-}
-META;
-        $this->createPath($viewDir);
-        file_put_contents($viewPath, $meta);
-        return true;
-    }
+//    private function createMeta($showName, $dir)
+//    {
+//        if (!empty($this->config['view_root'])) {
+//            $viewDir = $this->config['view_root'] . "/{$dir}/";
+//            $viewPath = $viewDir . 'meta.json';
+//        } else {
+//            return '配置错误';
+//        }
+//        if (file_exists($viewPath)) {
+//            return 'meta.json文件已存在';
+//        }
+//        $meta = <<<META
+//{
+//    "index": "{$showName}",
+//    "add": "添加{$showName}",
+//    "edit": "修改{$showName}"
+//}
+//META;
+//        $this->createPath($viewDir);
+//        file_put_contents($viewPath, $meta);
+//        return true;
+//    }
 
     /**
      * 生成模型

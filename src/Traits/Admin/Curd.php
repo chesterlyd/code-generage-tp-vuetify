@@ -19,10 +19,13 @@ use think\Validate;
  * @property $countField
  * @property $modelName
  * @property $searchField
+ * @property $listSearchField
  * @property $pageLimit
  * @property $orderField
+ * @property $listOrderField
  * @property bool $cache
  * @property array $indexField
+ * @property array $listIndexField
  * @property array $addField
  * @property array $editField
  * @property array $add_rule
@@ -137,6 +140,38 @@ trait Curd
                 }
             }
         }
+    }
+
+    public function getAll(Request $request)
+    {
+        $special = [];
+        $onlyArr = [];
+        foreach ($this->listSearchField as $k => $v) {
+            if (is_array($v)) {
+                $key = key($v);
+                $val = $v[$key];
+                $onlyArr[] = $key;
+                $special[$key] = $val;
+            } else {
+                $onlyArr[] = $v;
+            }
+        }
+        $relationSearch = '';
+        $whereData = $this->search($request->only($onlyArr), $special, $relationSearch);
+
+        if (!empty($relationSearch)) {
+            $model = model($this->modelName)->$relationSearch()->hasWhere([], null);
+        } else {
+            $model = model($this->modelName);
+        }
+        $sql = $model->field($this->listIndexField);
+        $this->setWhere($whereData, $sql);
+        if ($this->cache) {
+            $sql->cache(true, 0, $this->modelName . '_cache_data');
+        }
+
+        $list = $sql->order($this->listOrderField)->select()->toArray();
+        $this->returnSuccess($list);
     }
 
     /**

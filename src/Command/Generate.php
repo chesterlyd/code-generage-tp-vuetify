@@ -122,6 +122,71 @@ function verifyToken($authorization)
 
     return true;
 }', FILE_APPEND);
+
+        $adminSqlStr = "CREATE TABLE `admin` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `account` varchar(128) NOT NULL COMMENT '账号',
+  `password` varchar(255) NOT NULL COMMENT '密码',
+  `name` varchar(64) NOT NULL COMMENT '名称',
+  `is_disable` tinyint(1) unsigned NOT NULL DEFAULT '2' COMMENT '是否禁用',
+  `create_operator_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建人',
+  `create_time` int(10) unsigned NOT NULL COMMENT '创建日期',
+  `update_time` int(10) unsigned NOT NULL COMMENT '更新时间',
+  `delete_time` int(10) unsigned DEFAULT NULL COMMENT '删除时间',
+  `super_admin` tinyint(1) DEFAULT '0' COMMENT '超级管理员 1-是 0-否',
+  `province` varchar(255) DEFAULT NULL COMMENT '省',
+  `city` varchar(255) DEFAULT NULL COMMENT '市',
+  `area` varchar(255) DEFAULT NULL COMMENT '区',
+  `auth_rule` text COMMENT '权限规则',
+  `is_platform` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1-平台 2-区域',
+  `auth_rule_group_id` int(11) DEFAULT NULL COMMENT '角色ID',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `accountUnique` (`account`) USING BTREE,
+  KEY `admin_create_time_index` (`create_time`) USING BTREE,
+  KEY `admin_delete_time_index` (`delete_time`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COMMENT='后台 —— 管理员表';";
+
+        $authGroupSqlStr = "CREATE TABLE `auth_group` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(100) NOT NULL DEFAULT '',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `rules` varchar(2048) NOT NULL DEFAULT '',
+  `create_operator_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建人',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COMMENT='后台 —— 用户组';";
+
+        $authGroupAccessSqlStr = "CREATE TABLE `auth_group_access` (
+  `uid` int(10) unsigned NOT NULL,
+  `group_id` int(10) unsigned NOT NULL,
+  UNIQUE KEY `uid_group_id` (`uid`,`group_id`) USING BTREE,
+  KEY `uid` (`uid`) USING BTREE,
+  KEY `group_id` (`group_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='后台 —— 用户组权限';";
+
+        $authRuleSqlStr = "CREATE TABLE `auth_rule` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '父级id',
+  `name` varchar(80) NOT NULL COMMENT '节点',
+  `title` char(20) NOT NULL DEFAULT '',
+  `type` tinyint(1) NOT NULL DEFAULT '1',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `pid` int(10) unsigned DEFAULT NULL,
+  `sort` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
+  `condition` varchar(1024) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `name` (`name`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=95 DEFAULT CHARSET=utf8mb4 COMMENT='后台 —— 权限';";
+
+        Db::startTrans();
+        try {
+            Db::execute($adminSqlStr);
+            Db::execute($authGroupSqlStr);
+            Db::execute($authGroupAccessSqlStr);
+            Db::execute($authRuleSqlStr);
+        } catch (\Exception $e) {
+            Db::rollback();
+            throw new \Exception($e->getMessage());
+        }
+        Db::commit();
     }
 
     /**

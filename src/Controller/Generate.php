@@ -867,7 +867,7 @@ CODE;
 
         $templatePath = Config::get('curd.index_template');
         if (empty($templatePath)) {
-            $templatePath = __DIR__ . '/../Templates/index1.vue';
+            $templatePath = __DIR__ . '/../Templates/index.vue';
         }
         if (!file_exists($templatePath)) {
             return '模板文件不存在:' . $templatePath;
@@ -923,7 +923,7 @@ CODE;
         }
         $templatePath = Config::get('curd.add_template');
         if (empty($templatePath)) {
-            $templatePath = __DIR__ . '/../Templates/add1.vue';
+            $templatePath = __DIR__ . '/../Templates/add.vue';
         }
         if (!file_exists($templatePath)) {
             return '模板文件不存在:' . $templatePath;

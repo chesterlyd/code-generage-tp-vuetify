@@ -15,7 +15,7 @@ return [
      */
     'form' => [
         'text'        => '<el-form-item class="el-form-item input" label="{{label}}" prop="{{name}}"><el-input v-model="formData.{{name}}" placeholder="请输入{{label}}" clearable></el-input></el-form-item>',
-        'number'      => '<el-form-item class="el-form-item input" label="{{label}}" prop="{{name}}"><el-input-number v-model="formData.{{name}}" :min="0" clearable></<el-input-number></el-form-item>',
+        'number'      => '<el-form-item class="el-form-item input" label="{{label}}" prop="{{name}}"><el-input-number v-model="formData.{{name}}" :min="0" clearable></el-input-number></el-form-item>',
         'select'      => '<el-form-item class="el-form-item input" label="{{label}}" prop="{{name}}"><v-select v-model="formData.{{name}}" placeholder="请选择"></v-select></el-form-item>',
         'uploadImage' => '<el-form-item class="el-form-item input" label="{{label}}" prop="{{name}}"><v-upload max="1" v-model="formData.{{name}}" type="image"></v-upload></el-form-item>',
         'uploadVideo' => '<el-form-item class="el-form-item input" label="{{label}}" prop="{{name}}"><v-upload max="1" v-model="formData.{{name}}" type="video"></v-upload></el-form-item>',

@@ -28,8 +28,8 @@
 <script setup>
 const rules = {}
 const { toPage,loading, temporaryLoading, disabled, form, formData, submit, temporary, deleteTemporary } = useEdit({
-  url: "/demo/tmpDemoGenerate/info",
-  submitUrl: "/demo/tmpDemoGenerate/edit",
+  url: "{{ save_path }}",
+  submitUrl: "{{ save_path }}",
   formData: {{curd_form_field}},
 })
 </script>
